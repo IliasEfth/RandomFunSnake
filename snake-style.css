@@ -1,0 +1,16 @@
+﻿.red-background {
+	background: black;
+}
+
+.width-500{
+	width: 500px;
+}
+
+.height-500{
+	height: 500px;
+}
+
+.score{
+	color: red;
+	font-size: 150%; 
+}
