@@ -7,7 +7,7 @@ function startSnake(){
 	var context = domHandler.Context();
 	var basicCell = domHandler.Cell(totalCells);
 	var snake = new Snake(new Position(0,0), new Cell(basicCell.width , basicCell.height), '#FF0000');
-	var fruitHandlerObj = new FruitHandler(new Cell(basicCell.width , basicCell.height));
+	var fruitHandlerObj = new FruitHandler(new Cell(basicCell.width , basicCell.height), domHandler.CanvasCell);
 	var score = snake.Score;
 
 	context.registerElement(snake);
@@ -466,11 +466,14 @@ class FruitHandler{
 	#positions;
 	#cell;
 	#currentFruit;
-	constructor(cell){
+	#canvasCell;
+	constructor(cell, canvasCell){
 		if((cell instanceof Cell) === false) throw new Error('argument cell is not instance of Cell');
+		if((canvasCell instanceof Cell) === false) throw new Error('argument canvasCell is not instance of Cell');
 		this.#cell = new Cell(cell.width , cell.height);
 		this.#currentFruit = null;
 		this.#positions = [];
+		this.#canvasCell = canvasCell;
 	}
 
 	get Positions(){
@@ -478,8 +481,8 @@ class FruitHandler{
 	}
 
 	#addNewFruit(){
-		var xAxis = Math.floor(Math.random() * 500);
-		var yAxis = Math.floor(Math.random() * 500);
+		var xAxis = Math.floor(Math.random() * this.#canvasCell.width);
+		var yAxis = Math.floor(Math.random() * this.#canvasCell.height);
 
 		var xToString = xAxis.toString();
 		xToString = xToString.slice(0, xToString.length - 1) + '0';
