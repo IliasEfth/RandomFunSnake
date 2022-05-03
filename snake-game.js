@@ -58,10 +58,13 @@ class Context {
 	#context2d;
 	#elements;
 	#registeredItems;
-	constructor(context2d){
+	#canvasCell;
+	constructor(context2d, canvasCell){
 		if(!context2d) throw new Error('cannot initialize Context');
+		if((canvasCell instanceof Cell) === false) throw new Error('cannot initialize Context cause of cell reference');
 		this.#context2d = context2d;
 		this.#registeredItems = [];
+		this.#canvasCell = canvasCell;
 	}
 
 	#hasDuplicates(arr){
@@ -84,12 +87,22 @@ class Context {
 				element1.Collision2d(element1);
 				return;
 			}
-
+			
+			if(_this.#somePositionsPassedTheRange(pos1)){
+				element1.Collision2d(null);
+				return;
+			}
+			
 			_this.#elements.forEach(function(element2){
 				if(element1 === element2) return; 
 				var pos2 = element2.Positions;
 				if(_this.#hasDuplicates(pos2)){//has duplicates
 					element2.Collision2d(element2);
+					return;
+				}
+				
+				if(_this.#somePositionsPassedTheRange(pos2)){
+					element2.Collision2d(null);
 					return;
 				}
 
@@ -107,6 +120,20 @@ class Context {
 				if(_this.#hasDuplicates(mergedPositions))
 					element1.Collision2d(element2);
 			});
+		});
+	}
+	
+	#somePositionsPassedTheRange(positions){
+		var _this = this;
+		return positions.some(function(position){
+			if(position.xAxis < 0 
+				|| position.xAxis >= _this.#canvasCell.width
+				|| position.yAxis < 0 
+				|| position.yAxis >= _this.#canvasCell.height){
+				return true;	
+			}
+			
+			return false;
 		});
 	}
 
@@ -191,7 +218,7 @@ class DOMHandler{
 	}
 
 	Context(){
-		return new Context(this.#canvas.getContext('2d'));
+		return new Context(this.#canvas.getContext('2d'), this.CanvasCell);
 	}
 	
 	Cell(totalCells){
@@ -338,7 +365,7 @@ class Snake{//snake has one cell and one style
 	}
 
 	Collision2d(element){
-		if(element instanceof Snake){
+		if(element instanceof Snake || element === null){
 			window.alert('game over!');
 		}
 		
@@ -477,7 +504,9 @@ class FruitHandler{
 	}
 
 	Collision2d(element){
-	
+		if(element === null){//bug? fruit cannot be out of border
+			window.alert('fruit is out of range');
+		}
 	}
 
 	RemoveFruitFromContext(){
