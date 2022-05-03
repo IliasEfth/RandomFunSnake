@@ -287,6 +287,7 @@ class Snake{//snake has one cell and one style
 		}
 
 		this.#score = this.#score + fruit.Score;
+		fruit.RemoveFruitFromContext();
 	}
 
 	get Positions(){
@@ -454,8 +455,8 @@ class FruitHandler{
 	}
 
 	#addNewFruit(){
-		var xAxis = Math.floor(Math.random() * 50);
-		var yAxis = Math.floor(Math.random() * 50);
+		var xAxis = Math.floor(Math.random() * 500);
+		var yAxis = Math.floor(Math.random() * 500);
 
 		var xToString = xAxis.toString();
 		xToString = xToString.slice(0, xToString.length - 1) + '0';
@@ -476,10 +477,11 @@ class FruitHandler{
 	}
 
 	Collision2d(element){
-		if(element instanceof Snake){
-			this.#addNewFruit();
-		}
 	
+	}
+
+	RemoveFruitFromContext(){
+		this.#currentFruit = null;
 	}
 
 	get Score(){
