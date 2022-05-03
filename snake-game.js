@@ -88,7 +88,7 @@ class Context {
 				return;
 			}
 			
-			if(_this.#somePositionsPassedTheRange(pos1)){
+			if(_this.#somePositionsPassedTheCanvasRange(pos1)){
 				element1.Collision2d(null);
 				return;
 			}
@@ -101,7 +101,7 @@ class Context {
 					return;
 				}
 				
-				if(_this.#somePositionsPassedTheRange(pos2)){
+				if(_this.#somePositionsPassedTheCanvasRange(pos2)){
 					element2.Collision2d(null);
 					return;
 				}
@@ -123,7 +123,7 @@ class Context {
 		});
 	}
 	
-	#somePositionsPassedTheRange(positions){
+	#somePositionsPassedTheCanvasRange(positions){
 		var _this = this;
 		return positions.some(function(position){
 			if(position.xAxis < 0 
