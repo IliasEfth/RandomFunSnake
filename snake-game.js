@@ -351,13 +351,9 @@ class Snake{//snake has one cell and one style
 	Update(){
 		var headPosition = this.#getNewPositionBasedOnDirection();
 		var bd = [headPosition];
-
+		
 		if(this.#body.length > 1){
-			for(var counter = 0 ; counter < this.#body.length - 1 ; counter = counter + 1){
-				var bdEl = this.#body[counter];
-				
-				bd.push(new Position(bdEl.xAxis,bdEl.yAxis));
-			}
+			bd = bd.concat(this.#body.slice(0,this.#body.length -1));
 		}
 
 		this.#body = bd;
